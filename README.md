@@ -2,6 +2,10 @@
 
 Pipeline de Machine Learning que prevê se uma sala está **ocupada ou vazia** a partir de sensores ambientais IoT, para apoiar o desligamento automático de ar-condicionado (HVAC) e iluminação e reduzir o consumo de energia.
 
+> **Resultado:** o modelo KNN identificou a ocupação das salas com **99,48% de acurácia** em dados novos, com apenas 13 casos de ar-condicionado ligado em sala vazia em 3.824 medições.
+
+![Matriz de confusão dos dois modelos no conjunto de teste](reports/figures/matriz_confusao.png)
+
 ---
 
 ## Contexto e problema
@@ -52,9 +56,12 @@ ocupacao_salas_ml/
 │   ├── processed/
 │   ├── external/
 │   └── occupancy_completo.csv   # base completa (3 arquivos unidos)
+├── docs/
+│   └── kanban_sprints.png       # quadro Kanban do planejamento
 ├── notebooks/
 │   └── analise_ocupacao.ipynb   # notebook principal, com as 7 fases
 ├── reports/
+│   └── figures/                 # gráficos gerados pelo notebook
 ├── src/
 ├── .gitignore
 ├── requirements.txt
@@ -108,6 +115,10 @@ A base já está versionada em `data/occupancy_completo.csv`. Se o arquivo não 
 - **A umidade relativa quase não se relaciona com a ocupação** (0,05) e é muito correlacionada com `HumidityRatio` (0,93).
 - **As classes são desbalanceadas**: na base original, 76,9% das medições são de salas vazias e 23,1% de salas ocupadas.
 - **Os sensores têm escalas muito diferentes** (`Light` vai de 0 a quase 1.700, enquanto `HumidityRatio` fica abaixo de 0,007), o que torna a padronização essencial para o KNN.
+
+![Correlação de Pearson entre as variáveis](reports/figures/correlacao.png)
+
+![Boxplots das variáveis dos sensores](reports/figures/boxplots_sensores.png)
 
 ## Decisões técnicas
 
@@ -182,6 +193,7 @@ Os dois modelos ficaram muito acima da referência mínima de cerca de 75%, que 
 | `feature/split-scaling` | Fases 4 e 5: divisão dos dados e padronização |
 | `feature/modelagem` | Fases 6 e 7: ajuste de hiperparâmetros e avaliação final |
 | `feature/readme` | Documentação do projeto |
+| `feature/ajustes-finais` | Figuras, matriz de confusão em mapa de calor, Kanban e ajustes finais |
 
 Cada branch foi criada a partir da `develop` e integrada por Pull Request, sem exclusão da branch após o merge.
 
@@ -199,7 +211,9 @@ As tarefas foram organizadas em um quadro Kanban no TickTick, com uma coluna por
 | S5 Documentação | Repositório pronto para avaliação e portfólio | 28/11 | 27/11 |
 | S6 Vídeo + Entrega | Entregar no AVA com folga | 29/11 | [ ] |
 
-**Retrospectiva:** todas as Sprints foram concluídas dentro do período planejado. O principal imprevisto foi o erro de formatação na base em planilha, resolvido no primeiro dia com o download direto da UCI, sem atrasar o cronograma.
+![Quadro Kanban das Sprints no TickTick](docs/kanban_sprints.png)
+
+**Retrospectiva:** todas as Sprints foram concluídas dentro do período planejado, e as duas últimas foram adiantadas em um dia. O principal imprevisto foi o erro de formatação na base em planilha, resolvido no primeiro dia com o download direto da UCI, sem atrasar o cronograma.
 
 ## Melhorias futuras
 
